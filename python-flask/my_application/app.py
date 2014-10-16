@@ -20,7 +20,7 @@ def show_post(post_id):
     # show the post with the given id, the id is an integer
     return 'Post %d' % post_id
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('./upload', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
         f = request.files['file']
