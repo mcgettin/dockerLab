@@ -24,7 +24,7 @@ def show_post(post_id):
 def upload_file():
     if request.method == 'POST':
         f = request.files['file']
-        f.save('./uploads/'+f.filename)
+        f.save('/uploads/'+f.filename)
     return '',201
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
