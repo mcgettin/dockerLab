@@ -40,25 +40,29 @@ def chk_uploads():
 
 @app.route('/eu1')
 def run_eu1():
-  i=0
-  total=0
-  while i < 1000: #stop when we reach multiple bigger than 1000 
-    if(i%5==0 or i%3==0): #ie if multiple of 5 or 3
-      total+=i #add multiple to cumulative tally
+	i=0
+	total=0
+	
+  	while i < 1000: #stop when we reach multiple bigger than 1000 
+    		if(i%5==0 or i%3==0): #ie if multiple of 5 or 3
+      			total+=i #add multiple to cumulative tally
         
-      i+=1 #next number (will be used only if a valid multiple)
-  return total
+      		i+=1 #next number (will be used only if a valid multiple)
+  	
+	result=" "+(str)(total)+"\n"		
+  	return result
 
 @app.route('/eu2')
 def run_eu2():
-  pre,fib,tally=0,1,0 #initialize variables, pre is last term fib is current
-  MAX=4000000 #4million is maximum value of a term
+	pre,fib,tally=0,1,0 #initialize variables, pre is last term fib is current
+  	MAX=4000000 #4million is maximum value of a term
 
-  while fib <= MAX: 
-    if(fib%2): tally+=fib #add to tally is fib term is even
-    pre,fib=fib,pre+fib #get new values for pre and fib
-  
-  return tally
+  	while fib <= MAX: 
+    		if(fib%2): tally+=fib #add to tally is fib term is even
+    		pre,fib=fib,pre+fib #get new values for pre and fib
+  	
+	result=" "+(str)(tally)+"\n"
+  	return result
 
 
 if __name__ == "__main__":
