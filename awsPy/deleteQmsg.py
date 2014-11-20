@@ -1,4 +1,4 @@
-# This script returns the number of messages on a queue
+# This script deletes a queue's message
 #
 # Author - mcgettin
 #
@@ -15,9 +15,9 @@ conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xxIAINXYPLZEZU
 #if the queue name is given: proceed
 if(len(sys.argv) == 2):
 	q = conn.get_queue(sys.argv[1]) #queue name in argv
-	num = q.count()
-	if (num > 0): print("No. of messages: "+str(num))
-	else: print("No messages on queue")
+	msg = q.get_messages()[0] #gets next message
+	msg.get_body()
+	q.delete_message(msg) #deletes that retrieved message
 else:
 	print("FAIL: A name is needed (as argument) for the Queue.")
 

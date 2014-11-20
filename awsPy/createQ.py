@@ -10,7 +10,7 @@ from boto.sqs.message import Message
 from boto.sqs.connection import SQSConnection
 from boto.exception import SQSError
 
-conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
+conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xxKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xxfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
 
 
 if(len(sys.argv) == 2): # making sure there is a name arg given

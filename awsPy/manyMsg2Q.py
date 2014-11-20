@@ -10,14 +10,15 @@ from boto.sqs.message import Message
 from boto.sqs.connection import SQSConnection
 from boto.exception import SQSError
 
-conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
+conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xxIAINXYPLZEZUALDFYQ', aws_secret_access_key='xxfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
 
 
-if(len(sys.argv) > 2):
+if(len(sys.argv) == 2):
 	q = conn.get_queue(sys.argv[1])
 	txt = Message()
 	for i in range(100): #make 100 messages (set + write)
-		txt.set_body("auto-gen msg no."+str(i+1))
+		gen="auto-gen msg no."+str(i+1)		
+		txt.set_body(gen)
 		q.write(txt)
 else:
 	print("FAIL: A name is needed (as argument) for the Queue.")

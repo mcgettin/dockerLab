@@ -72,20 +72,29 @@ def run_eu2():
 
 @app.route('/listqueues')
 def listQueues():
-	conn1 = boto.sqs.connect_to_region("us-east-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
-	conn2 = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
+	conn1 = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
+	#conn2 = boto.sqs.connect_to_region("us-east-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
 
         result=""
         rs = conn1.get_all_queues()
         for q in rs:
                 result=result + (str)(q.id) + "\n"
-
+	'''
         rs = conn2.get_all_queues()
         for q in rs:
                 result=result + (str)(q.id) + "\n"
-
+	'''
         return result
 
+@app.route('/createQ',methods=['GET','POST'])
+def createQueue():
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xxIAINXYPLEZEZUALDFYQ', aws_secret_access_key='xxfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
+	
+	if(request.method=='POST'):
+		mkQ=conn.create_queue(request.query)
+	else:
+		return "Wrong number of arguments\n"
+	return "queue created\n"
 
 if __name__ == "__main__":
 	app.run(host="0.0.0.0", debug=True)
