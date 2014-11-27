@@ -8,6 +8,7 @@ from boto.sqs.connection import SQSConnection
 from boto.exception import SQSError
 
 app = Flask(__name__)
+app.debug = True
 
 @app.route('/')
 def index():
@@ -72,29 +73,95 @@ def run_eu2():
 
 @app.route('/listqueues')
 def listQueues():
-	conn1 = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
-	#conn2 = boto.sqs.connect_to_region("us-east-1", aws_access_key_id='AKIAIR7EH3TNSTDUCWKA', aws_secret_access_key='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')
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
 
         result=""
-        rs = conn1.get_all_queues()
+        rs = conn.get_all_queues()
         for q in rs:
                 result=result + (str)(q.id) + "\n"
-	'''
-        rs = conn2.get_all_queues()
-        for q in rs:
-                result=result + (str)(q.id) + "\n"
-	'''
-        return result
+	return result
 
-@app.route('/createQ',methods=['GET','POST'])
-def createQueue():
-	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xxIAINXYPLEZEZUALDFYQ', aws_secret_access_key='xxfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
-	
-	if(request.method=='POST'):
-		mkQ=conn.create_queue(request.query)
+@app.route('/createQ/<name>')
+def createQueue(name):
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
+
+		
+	if(len(name)>0):
+		mkQ=conn.create_queue(name)
 	else:
 		return "Wrong number of arguments\n"
 	return "queue created\n"
+
+@app.route('/delQMsg/<name>')
+def deleteMsg(name):
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
+
+	#if the queue name is given: proceed
+	if(len(name) > 0):
+		q = conn.get_queue(name) #queue name in argv
+		msg = q.get_messages()[0] #gets next message
+		msg.get_body()
+		q.delete_message(msg) #deletes that retrieved message
+		return "message deleted"
+	else:
+		return "FAIL: A name is needed (as argument) for the Queue."
+
+@app.route('/readQMsg/<name>')
+def readMsg(name):
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
+
+	#if the queue name is given: proceed
+	if(len(name) > 0):
+		q = conn.get_queue(name) #queue name in argv
+		rd = q.get_messages()
+		if len(rd) > 0: #while there are messages on queue
+			return rd[0].get_body()
+		else: return "Queue has no more messages"
+	else:
+		return "FAIL: A name is needed (as argument) for the Queue."
+
+
+@app.route('/numQMsg/<name>')
+def countMsg(name):
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
+
+	#if the queue name is given: proceed
+	if(len(name) > 0):
+		q = conn.get_queue(name) #queue name in argv
+		num = q.count()
+		if (num > 0): return "No. of messages: "+str(num)
+		else: return "No messages on queue"
+	else:
+		return "FAIL: A name is needed (as argument) for the Queue."
+
+@app.route('/manyQMsg/<name>')
+def manyMsg(name):
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
+
+	if(len(name) > 0):
+		q = conn.get_queue(name)
+		txt = Message()
+		for i in range(100): #make 100 messages (set + write)
+			gen="auto-gen msg no."+str(i+1)
+			txt.set_body(gen)
+			q.write(txt)
+			return "wrote many messages"
+	else:
+		return "FAIL: A name is needed (as argument) for the Queue."
+
+@app.route('/writeQMsg/<name>/<msg>')
+def writeMsg(name,msg):	
+	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
+
+	if(len(name) > 0 and len(msg) > 0):
+		q = conn.get_queue(name)
+		txt = Message()
+		txt.set_body(msg)
+		q.write(txt)
+		return "wrote message"
+	else:
+		return "FAIL: A name and a message is needed (as arguments) for the Queue."
+
 
 if __name__ == "__main__":
 	app.run(host="0.0.0.0", debug=True)
