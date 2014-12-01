@@ -12,16 +12,16 @@ app.debug = True
 
 @app.route('/')
 def index():
-	return 'Index Page'
+	return 'Index Page\n'
 
 @app.route('/hello')
 def hello():
-	return 'Hello World'
+	return 'Hello World\n'
   
 @app.route('/user/<username>')
 def show_user_profile(username):
 # show the user profile for that user
-	return 'User %s' % username
+	return 'User %s\n' % username
 
 @app.route('/post/<int:post_id>')
 def show_post(post_id):
@@ -102,9 +102,9 @@ def deleteMsg(name):
 		msg = q.get_messages()[0] #gets next message
 		msg.get_body()
 		q.delete_message(msg) #deletes that retrieved message
-		return "message deleted"
+		return "message deleted\n"
 	else:
-		return "FAIL: A name is needed (as argument) for the Queue."
+		return "FAIL: A name is needed (as argument) for the Queue.\n"
 
 @app.route('/readQMsg/<name>')
 def readMsg(name):
@@ -116,9 +116,9 @@ def readMsg(name):
 		rd = q.get_messages()
 		if len(rd) > 0: #while there are messages on queue
 			return rd[0].get_body()
-		else: return "Queue has no more messages"
+		else: return "Queue has no more messages\n"
 	else:
-		return "FAIL: A name is needed (as argument) for the Queue."
+		return "FAIL: A name is needed (as argument) for the Queue.\n"
 
 
 @app.route('/numQMsg/<name>')
@@ -129,10 +129,10 @@ def countMsg(name):
 	if(len(name) > 0):
 		q = conn.get_queue(name) #queue name in argv
 		num = q.count()
-		if (num > 0): return "No. of messages: "+str(num)
-		else: return "No messages on queue"
+		if (num > 0): return "No. of messages: "+str(num)+"\n"
+		else: return "No messages on queue\n"
 	else:
-		return "FAIL: A name is needed (as argument) for the Queue."
+		return "FAIL: A name is needed (as argument) for the Queue.\n"
 
 @app.route('/manyQMsg/<name>')
 def manyMsg(name):
@@ -145,9 +145,9 @@ def manyMsg(name):
 			gen="auto-gen msg no."+str(i+1)
 			txt.set_body(gen)
 			q.write(txt)
-			return "wrote many messages"
+		return "wrote many messages\n"
 	else:
-		return "FAIL: A name is needed (as argument) for the Queue."
+		return "FAIL: A name is needed (as argument) for the Queue.\n"
 
 @app.route('/writeQMsg/<name>/<msg>')
 def writeMsg(name,msg):	
@@ -158,9 +158,9 @@ def writeMsg(name,msg):
 		txt = Message()
 		txt.set_body(msg)
 		q.write(txt)
-		return "wrote message"
+		return "wrote message\n"
 	else:
-		return "FAIL: A name and a message is needed (as arguments) for the Queue."
+		return "FAIL: A name and a message is needed (as arguments) for the Queue.\n"
 
 
 if __name__ == "__main__":
