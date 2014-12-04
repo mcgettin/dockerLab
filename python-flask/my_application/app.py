@@ -206,7 +206,7 @@ def manyMsg(name):
 '''prints user's message to a queue specified by the user
 '''
 #curl -d "name=newQ&message=Howdy!" 1721.7.0.xxx/writeQMsg
-@app.route('/writeQMsg/',methods=['GET','POST'])
+@app.route('/writeQMsg',methods=['GET','POST'])
 def writeMsg():	
 	conn = boto.sqs.connect_to_region("eu-west-1", aws_access_key_id='xKIAINXYPLZEZUALDFYQ', aws_secret_access_key='xqfZms2LJR39mi/W3eWBSGs0rD6dgfC9Q8lcCPRV')
 	#while a queue name is given and message is given too
